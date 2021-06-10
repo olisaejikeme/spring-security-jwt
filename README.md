@@ -1,6 +1,6 @@
 # SPRING-SECURITY-JWT
 
-A Spring Boot project with Spring Security and JWT based authorization and authentication implemented 
+A sample Spring Boot project with Spring Security and JWT based authorization and authentication implemented 
 
 WHAT IT DOES 
 
