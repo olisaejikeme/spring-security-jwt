@@ -1,18 +1,27 @@
 package com.example.sample.springsecurityjwt.services;
 
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import com.example.sample.springsecurityjwt.models.User;
+import com.example.sample.springsecurityjwt.repository.UserRepository;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    @Autowired
+    UserRepository userRepository;
 
-        return new User("User", "password", new ArrayList<>());
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+
+        return MyUserDetails.build(user);
     }
+
 }
