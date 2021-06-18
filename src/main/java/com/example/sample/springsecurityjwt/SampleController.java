@@ -2,6 +2,7 @@ package com.example.sample.springsecurityjwt;
 
 import com.example.sample.springsecurityjwt.models.AuthenticationRequest;
 import com.example.sample.springsecurityjwt.models.AuthenticationResponse;
+import com.example.sample.springsecurityjwt.services.MyUserDetails;
 import com.example.sample.springsecurityjwt.services.MyUserDetailsService;
 import com.example.sample.springsecurityjwt.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SampleController {
@@ -27,6 +25,7 @@ public class SampleController {
 
     @Autowired
     private JwtUtil jwtTokenUtil;
+
 
     @RequestMapping("/sample")
     public String Sample() {
@@ -41,9 +40,9 @@ public class SampleController {
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
 
-        } catch(BadCredentialsException e){
-                throw new Exception("Incorrect username or password", e);
-            }
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
 
@@ -52,6 +51,24 @@ public class SampleController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
+
+    @GetMapping(value = "/info")
+    public String[] index(@AuthenticationPrincipal MyUserDetails principal) {
+        String userEmail = principal.getEmail();
+        String userUserName = principal.getUsername();
+        String userName = principal.getName();
+
+        String[] info = new String[3];
+
+            info[0] = "Name: " + userName;
+            info[1] = "Email: " + userEmail;
+            info[2] = "Username: " + userUserName;
+
+            return info;
+    }
 }
+
+
+
 
 
