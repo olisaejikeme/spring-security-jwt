@@ -17,7 +17,7 @@ public class SpringSecurityJwtApplication {
 
 }
 
-@Component
+/*@Component
 class DemoCommandLineRunner implements CommandLineRunner {
 
 	@Autowired
@@ -45,3 +45,4 @@ class DemoCommandLineRunner implements CommandLineRunner {
 		userRepository.save(user4);
 	}
 }
+ */
